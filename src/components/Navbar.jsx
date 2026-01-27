@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 function Navbar({ user }) {
   return (
@@ -12,6 +14,8 @@ function Navbar({ user }) {
       <div className="flex gap-5">
         <Link to="/">Home</Link>
         <Link to="/pets-supplies">Pets & Supplies</Link>
+
+        {/* Show these only if user is logged in */}
         {user && (
           <>
             <Link to="/add-listing">Add Listing</Link>
@@ -23,10 +27,22 @@ function Navbar({ user }) {
 
       {/* Right */}
       <div className="flex gap-3">
+
         {user ? (
           <>
-            <span>{user.name}</span>
-            <button className="btn btn-sm btn-outline">Logout</button>
+            <span>{user.displayName || "User"}</span>
+            <button
+              className="btn btn-sm btn-outline"
+              onClick={async () => {
+                try {
+                  await signOut(auth);
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
+            >
+              Logout
+            </button>
           </>
         ) : (
           <>
@@ -34,6 +50,7 @@ function Navbar({ user }) {
             <Link to="/register" className="btn btn-sm btn-secondary">Register</Link>
           </>
         )}
+
       </div>
     </nav>
   );

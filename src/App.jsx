@@ -1,5 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
+import { Toaster } from "react-hot-toast";
+import Login from './pages/Login'
+import Register from "./pages/Register";
+import PrivateRoute from "./components/PrivateRoute";
+
 
 function Home() {
   return <h1 className="text-2xl font-bold">Home Page 🏠</h1>;
@@ -15,16 +20,32 @@ function NotFound() {
 
 function App() {
   return (
-    <Routes>
-      {/* Pages with Navbar + Footer */}
-      <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/pets-supplies" element={<PetsSupplies />} />
-      </Route>
+    <>
+      {/* Toaster should be outside Routes */}
+      <Toaster />
 
-      {/* 404 Page without Navbar/Footer */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+      <Routes>
+        {/* Pages with Navbar + Footer */}
+        <Route element={<Layout />}>
+
+          <Route path="/" element={<Home />} />
+          <Route path="/pets-supplies" element={<PetsSupplies />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+<Route element={<PrivateRoute />}>
+    <Route path="/add-listing" element={<h2>Add Listing Page</h2>} />
+    <Route path="/my-listings" element={<h2>My Listings Page</h2>} />
+    <Route path="/my-orders" element={<h2>My Orders Page</h2>} />
+  </Route>
+
+          
+        </Route>
+
+          
+        {/* 404 Page without Navbar/Footer */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
 
