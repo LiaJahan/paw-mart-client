@@ -1,0 +1,42 @@
+import { Link } from "react-router-dom";
+
+function Navbar({ user }) {
+  return (
+    <nav className="bg-blue-500 text-white p-5 flex justify-between items-center">
+      {/* Left */}
+      <div className="font-bold text-xl">
+        <Link to="/">PawMart 🐾</Link>
+      </div>
+
+      {/* Middle */}
+      <div className="flex gap-5">
+        <Link to="/">Home</Link>
+        <Link to="/pets-supplies">Pets & Supplies</Link>
+        {user && (
+          <>
+            <Link to="/add-listing">Add Listing</Link>
+            <Link to="/my-listings">My Listings</Link>
+            <Link to="/my-orders">My Orders</Link>
+          </>
+        )}
+      </div>
+
+      {/* Right */}
+      <div className="flex gap-3">
+        {user ? (
+          <>
+            <span>{user.name}</span>
+            <button className="btn btn-sm btn-outline">Logout</button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="btn btn-sm btn-primary">Login</Link>
+            <Link to="/register" className="btn btn-sm btn-secondary">Register</Link>
+          </>
+        )}
+      </div>
+    </nav>
+  );
+}
+
+export default Navbar;
