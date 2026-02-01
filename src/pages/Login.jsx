@@ -7,7 +7,6 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Email & Password Login
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -18,7 +17,6 @@ function Login() {
     }
   };
 
-  // Google Login
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);

@@ -43,7 +43,6 @@ function App() {
         </Route>
 
 
-        {/* 404 Page without Navbar/Footer */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

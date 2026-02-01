@@ -14,7 +14,7 @@ function AddListing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // prepare listing data
+    
     const listing = {
       name,
       category,
@@ -23,11 +23,11 @@ function AddListing() {
       description,
       image,
       date,
-      email: auth.currentUser.email, // current logged-in user
+      email: auth.currentUser.email,
     };
 
     try {
-      // send data to backend
+      
       const res = await fetch("http://localhost:5000/listings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -36,7 +36,7 @@ function AddListing() {
 
       if (res.ok) {
         toast.success("Listing added successfully!");
-        // reset form
+        
         setName("");
         setCategory("Pets");
         setPrice(0);

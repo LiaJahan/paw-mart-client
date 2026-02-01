@@ -9,14 +9,11 @@ function Register() {
   const [password, setPassword] = useState("");
   const [photoURL, setPhotoURL] = useState("");
 
-  // Email & Password Registration
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      // Create user in Firebase
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-      // Update display name and photo
       await updateProfile(userCredential.user, {
         displayName: name,
         photoURL: photoURL
@@ -28,7 +25,6 @@ function Register() {
     }
   };
 
-  // Google Login
   const handleGoogleRegister = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
