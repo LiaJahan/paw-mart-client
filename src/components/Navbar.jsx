@@ -5,17 +5,17 @@ import { auth } from "../firebase";
 function Navbar({ user }) {
   return (
     <nav className="bg-blue-500 text-white p-5 flex justify-between items-center">
-      {/* Left */}
+      
       <div className="font-bold text-xl">
         <Link to="/">PawMart 🐾</Link>
       </div>
 
-      {/* Middle */}
+      
       <div className="flex gap-5">
         <Link to="/">Home</Link>
         <Link to="/pets-supplies">Pets & Supplies</Link>
 
-        {/* Show these only if user is logged in */}
+        
         {user && (
           <>
             <Link to="/add-listing">Add Listing</Link>
@@ -25,7 +25,7 @@ function Navbar({ user }) {
         )}
       </div>
 
-      {/* Right */}
+      
       <div className="flex gap-3">
 
         {user ? (

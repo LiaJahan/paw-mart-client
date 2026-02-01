@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 
-// This component wraps private pages
+
 function PrivateRoute() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,7 +18,7 @@ function PrivateRoute() {
   }, []);
 
   if (loading) {
-    return <h2 className="text-center mt-20">Loading...</h2>; // simple loader
+    return <h2 className="text-center mt-20">Loading...</h2>; 
   }
 
   return user ? <Outlet /> : <Navigate to="/login" />;

@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import Login from './pages/Login'
 import Register from "./pages/Register";
 import PrivateRoute from "./components/PrivateRoute";
+import AddListing from "./pages/AddListing";
 
 
 function Home() {
@@ -21,27 +22,27 @@ function NotFound() {
 function App() {
   return (
     <>
-      {/* Toaster should be outside Routes */}
+      
       <Toaster />
 
       <Routes>
-        {/* Pages with Navbar + Footer */}
+        
         <Route element={<Layout />}>
 
           <Route path="/" element={<Home />} />
           <Route path="/pets-supplies" element={<PetsSupplies />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-<Route element={<PrivateRoute />}>
-    <Route path="/add-listing" element={<h2>Add Listing Page</h2>} />
-    <Route path="/my-listings" element={<h2>My Listings Page</h2>} />
-    <Route path="/my-orders" element={<h2>My Orders Page</h2>} />
-  </Route>
+          <Route element={<PrivateRoute />}>
+            <Route path="/add-listing" element={<AddListing />} />
+            <Route path="/my-listings" element={<h2>My Listings Page</h2>} />
+            <Route path="/my-orders" element={<h2>My Orders Page</h2>} />
+          </Route>
 
-          
+
         </Route>
 
-          
+
         {/* 404 Page without Navbar/Footer */}
         <Route path="*" element={<NotFound />} />
       </Routes>

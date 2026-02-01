@@ -10,7 +10,7 @@ function Layout() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // this will be null or the logged-in user
+      setUser(currentUser); 
     });
 
     return () => unsubscribe();
