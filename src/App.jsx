@@ -10,15 +10,18 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AddListing from "./pages/AddListing";
 import MyListings from "./pages/MyListings";
+import MyOrders from "./pages/MyOrders";
+import CategoryFiltered from "./pages/CategoryFiltered"; // ✅ IMPORTANT
 
 // Components
 import PrivateRoute from "./components/PrivateRoute";
 
 function NotFound() {
   return (
-    <h1 className="text-2xl font-bold text-red-600 text-center mt-20">
-      404 Page Not Found
-    </h1>
+    <div className="flex flex-col items-center justify-center h-screen text-center">
+      <h1 className="text-6xl font-bold text-red-500">404</h1>
+      <p className="text-xl mt-2">Page Not Found</p>
+    </div>
   );
 }
 
@@ -28,12 +31,19 @@ function App() {
       <Toaster />
 
       <Routes>
-        {/* Layout wraps all normal pages */}
+        {/* Layout wrapper */}
         <Route element={<Layout />}>
-          
+
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/pets-supplies" element={<PetsSupplies />} />
+
+          {/* ✅ REQUIRED ROUTE */}
+          <Route
+            path="/category-filtered-product/:categoryName"
+            element={<CategoryFiltered />}
+          />
+
           <Route path="/listing/:id" element={<ListingDetails />} />
 
           <Route path="/login" element={<Login />} />
@@ -43,15 +53,11 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route path="/add-listing" element={<AddListing />} />
             <Route path="/my-listings" element={<MyListings />} />
-            
-            <Route
-              path="/my-orders"
-              element={<h2 className="text-center mt-10">My Orders Page</h2>}
-            />
+            <Route path="/my-orders" element={<MyOrders />} />
           </Route>
         </Route>
 
-        {/* 404 Page (NO Navbar/Footer) */}
+        {/* 404 (no navbar/footer) */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

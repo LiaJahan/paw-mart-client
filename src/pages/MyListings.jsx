@@ -10,14 +10,17 @@ function MyListings() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editListing, setEditListing] = useState(null);
 
-  // Get current user safely
+  // ✅ Dynamic title
   useEffect(() => {
-    const currentUser = auth.currentUser;
-    setUser(currentUser);
+    document.title = "My Listings | PawMart";
+  }, []);
+
+  // Get user
+  useEffect(() => {
+    setUser(auth.currentUser);
   }, []);
 
   // Fetch listings
@@ -27,23 +30,27 @@ function MyListings() {
         `${import.meta.env.VITE_API_URL}/listings?email=${email}`
       );
       const data = await res.json();
-      setListings(data);
-    } catch (err) {
+
+      setListings(Array.isArray(data) ? data : []);
+    } catch {
       toast.error("Failed to fetch listings");
+      setListings([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Run fetch when user is ready
   useEffect(() => {
     if (user?.email) {
       fetchListings(user.email);
     }
   }, [user, location.key]);
 
-  // Delete listing
+  // ✅ Delete with confirmation
   const handleDelete = async (id) => {
+    const confirmDelete = confirm("Are you sure?");
+    if (!confirmDelete) return;
+
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/listings/${id}?email=${user.email}`,
@@ -54,27 +61,24 @@ function MyListings() {
 
       if (res.ok) {
         toast.success("Listing deleted!");
-        setListings(listings.filter((l) => l._id !== id));
+        setListings((prev) => prev.filter((l) => l._id !== id));
       } else {
         toast.error("Delete failed");
       }
-    } catch (err) {
+    } catch {
       toast.error("Server error");
     }
   };
 
-  // Open edit modal
   const handleEdit = (listing) => {
     setEditListing(listing);
     setIsModalOpen(true);
   };
 
-  // Update form input
   const handleChange = (e) => {
     setEditListing({ ...editListing, [e.target.name]: e.target.value });
   };
 
-  // Submit update
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -93,8 +97,8 @@ function MyListings() {
       if (res.ok) {
         toast.success("Listing updated!");
 
-        setListings(
-          listings.map((l) =>
+        setListings((prev) =>
+          prev.map((l) =>
             l._id === editListing._id ? editListing : l
           )
         );
@@ -103,28 +107,32 @@ function MyListings() {
       } else {
         toast.error("Update failed");
       }
-    } catch (err) {
+    } catch {
       toast.error("Server error");
     }
   };
 
-  // Loading state
+  // ✅ Spinner
   if (loading) {
-    return <p className="text-center mt-5">Loading...</p>;
+    return (
+      <div className="flex justify-center mt-20">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
   }
 
-  // No user fallback
   if (!user) {
-    return <p className="text-center mt-5">User not logged in</p>;
+    return <p className="text-center mt-10">User not logged in</p>;
   }
 
   return (
     <div className="max-w-5xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">My Listings</h2>
 
-      {listings.length === 0 && <p>No listings found.</p>}
+      {listings.length === 0 && (
+        <p className="text-center mt-5">No listings found</p>
+      )}
 
-      {/* Table */}
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -170,7 +178,6 @@ function MyListings() {
         </table>
       </div>
 
-      {/* Modal */}
       {isModalOpen && editListing && (
         <div className="modal modal-open">
           <div className="modal-box">
@@ -201,7 +208,7 @@ function MyListings() {
                 onChange={handleChange}
                 className="textarea textarea-bordered w-full"
                 required
-              ></textarea>
+              />
 
               <div className="modal-action">
                 <button

@@ -16,7 +16,12 @@ function AddListing() {
   const [image, setImage] = useState("");
   const [date, setDate] = useState("");
 
-  // get current user safely
+  // ✅ dynamic title (correct place)
+  useEffect(() => {
+    document.title = "Add Listing | PawMart";
+  }, []);
+
+  // get current user
   useEffect(() => {
     setUser(auth.currentUser);
   }, []);
@@ -29,7 +34,6 @@ function AddListing() {
       return;
     }
 
-    // validation (simple but useful)
     if (!name || !location || !description || !image || !date) {
       toast.error("Please fill all fields");
       return;
@@ -60,7 +64,6 @@ function AddListing() {
 
       if (res.ok) {
         toast.success("Listing added successfully!");
-
         navigate("/my-listings");
 
         // reset form
@@ -74,14 +77,18 @@ function AddListing() {
       } else {
         toast.error("Failed to add listing");
       }
-    } catch (error) {
+    } catch {
       toast.error("Server error");
     }
   };
 
-  // loading fallback
+  // loading UI (better UX)
   if (!user) {
-    return <p className="text-center mt-10">Loading user...</p>;
+    return (
+      <div className="flex justify-center mt-10">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
   }
 
   return (
@@ -89,7 +96,7 @@ function AddListing() {
       <h2 className="text-2xl font-bold mb-5">Add Listing 🐾</h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        {/* Name */}
+
         <input
           type="text"
           placeholder="Pet/Product Name"
@@ -99,7 +106,6 @@ function AddListing() {
           required
         />
 
-        {/* Category */}
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
@@ -111,7 +117,6 @@ function AddListing() {
           <option>Pet Care Products</option>
         </select>
 
-        {/* Price */}
         {category !== "Pets" && (
           <input
             type="number"
@@ -123,7 +128,6 @@ function AddListing() {
           />
         )}
 
-        {/* Location */}
         <input
           type="text"
           placeholder="Location"
@@ -133,7 +137,6 @@ function AddListing() {
           required
         />
 
-        {/* Description */}
         <textarea
           placeholder="Description"
           value={description}
@@ -142,7 +145,6 @@ function AddListing() {
           required
         ></textarea>
 
-        {/* Image */}
         <input
           type="text"
           placeholder="Image URL"
@@ -152,7 +154,6 @@ function AddListing() {
           required
         />
 
-        {/* Date */}
         <input
           type="date"
           value={date}
@@ -161,7 +162,6 @@ function AddListing() {
           required
         />
 
-        {/* Email (readonly) */}
         <input
           type="text"
           value={user.email}
@@ -169,7 +169,6 @@ function AddListing() {
           className="input input-bordered w-full bg-gray-100"
         />
 
-        {/* Submit */}
         <button type="submit" className="btn btn-primary mt-2">
           Add Listing
         </button>

@@ -5,8 +5,14 @@ function PetsSupplies() {
   const [listings, setListings] = useState([]);
   const [category, setCategory] = useState("");
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+
+  // ✅ Dynamic title
+  useEffect(() => {
+    document.title = "Pets & Supplies | PawMart";
+  }, []);
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -20,32 +26,39 @@ function PetsSupplies() {
         const res = await fetch(url);
         const data = await res.json();
 
-        console.log("DATA FROM BACKEND:", data); // 🔍 debug
-
         setListings(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Fetch error:", err);
+      } catch {
         setListings([]);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchListings();
   }, [category]);
 
-  // SAFE filtering (no crash)
   const filteredListings = listings.filter((item) =>
     (item?.name || "").toLowerCase().includes(search.toLowerCase())
   );
+
+  // ✅ Loading spinner
+  if (loading) {
+    return (
+      <div className="flex justify-center mt-20">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4">
       <h1 className="text-3xl font-bold mb-4">Pets & Supplies</h1>
 
       {/* Filters */}
-      <div className="flex gap-3 mb-4">
+      <div className="flex flex-col md:flex-row gap-3 mb-4">
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="Search by name..."
           className="input input-bordered w-full"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -56,7 +69,7 @@ function PetsSupplies() {
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
-          <option value="">All</option>
+          <option value="">All Categories</option>
           <option>Pets</option>
           <option>Pet Food</option>
           <option>Accessories</option>
@@ -67,20 +80,26 @@ function PetsSupplies() {
       {/* Listings */}
       <div className="grid md:grid-cols-3 gap-4">
         {filteredListings.map((item) => (
-          <div key={item._id} className="border p-3 rounded">
+          <div key={item._id} className="border p-3 rounded shadow">
             <img
               src={item.image}
-              alt=""
-              className="h-40 w-full object-cover"
+              alt={item.name || "Pet"}
+              className="h-40 w-full object-cover rounded"
             />
 
-            <h3 className="font-bold">{item.name}</h3>
+            <h3 className="font-bold mt-2">{item.name}</h3>
+
+            <p className="text-sm">{item.category}</p>
+            <p className="text-sm">{item.location}</p>
+
+            <p className="font-semibold">
+              {item.price === 0
+                ? "Free for Adoption"
+                : `$${item.price}`}
+            </p>
 
             <button
-              onClick={() => {
-                console.log("NAVIGATE:", item._id);
-                navigate(`/listing/${item._id}`);
-              }}
+              onClick={() => navigate(`/listing/${item._id}`)}
               className="btn btn-primary mt-2 w-full"
             >
               See Details
@@ -90,7 +109,7 @@ function PetsSupplies() {
       </div>
 
       {filteredListings.length === 0 && (
-        <p className="text-center mt-10">No listings</p>
+        <p className="text-center mt-10">No listings found</p>
       )}
     </div>
   );

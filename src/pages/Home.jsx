@@ -4,8 +4,14 @@ import { useNavigate } from "react-router-dom";
 function Home() {
   const navigate = useNavigate();
   const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch recent listings (limit 6)
+  // ✅ Dynamic title
+  useEffect(() => {
+    document.title = "Home | PawMart";
+  }, []);
+
+  // Fetch recent listings
   useEffect(() => {
     const fetchListings = async () => {
       try {
@@ -13,34 +19,46 @@ function Home() {
           `${import.meta.env.VITE_API_URL}/listings?limit=6`
         );
         const data = await res.json();
-        setListings(data);
-      } catch (err) {
-        console.error("Failed to fetch listings");
+
+        setListings(Array.isArray(data) ? data : []);
+      } catch {
+        setListings([]);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchListings();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center mt-20">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-10">
 
       {/* 🔥 Banner */}
       <div className="relative h-[400px] rounded overflow-hidden">
-  <img
-    src="https://images.unsplash.com/photo-1601758003122-53c40e686a19"
-    className="w-full h-full object-cover"
-  />
+        <img
+          src="https://images.unsplash.com/photo-1601758003122-53c40e686a19"
+          alt="Pets Banner"
+          className="w-full h-full object-cover"
+        />
 
-  <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-white text-center">
-    <h1 className="text-4xl font-bold mb-3">
-      Find Your Furry Friend Today!
-    </h1>
-    <p className="text-lg">
-      Adopt, Don’t Shop — Give a Pet a Home 🐾
-    </p>
-  </div>
-</div>
+        <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-white text-center">
+          <h1 className="text-4xl font-bold mb-3">
+            Find Your Furry Friend Today!
+          </h1>
+          <p className="text-lg">
+            Adopt, Don’t Shop — Give a Pet a Home 🐾
+          </p>
+        </div>
+      </div>
 
       {/* 🧩 Categories */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -76,14 +94,13 @@ function Home() {
             >
               <img
                 src={item.image}
-                alt={item.name}
+                alt={item.name || "Pet"}
                 className="h-40 w-full object-cover rounded"
               />
 
               <h3 className="font-bold mt-2">{item.name}</h3>
 
               <p className="text-sm">{item.category}</p>
-
               <p className="text-sm">{item.location}</p>
 
               <p className="font-semibold">
@@ -103,6 +120,12 @@ function Home() {
             </div>
           ))}
         </div>
+
+        {listings.length === 0 && (
+          <p className="text-center mt-5">
+            No recent listings
+          </p>
+        )}
       </div>
 
       {/* 💡 Extra Section 1 */}
@@ -112,7 +135,6 @@ function Home() {
         </h2>
         <p>
           Adopting saves lives and gives pets a second chance.
-          Help reduce stray animals and bring happiness home.
         </p>
       </div>
 
@@ -122,8 +144,7 @@ function Home() {
           Meet Our Pet Heroes
         </h2>
         <p>
-          Amazing adopters and caregivers making a difference
-          in animals’ lives every day.
+          Amazing adopters making a difference every day.
         </p>
       </div>
     </div>
