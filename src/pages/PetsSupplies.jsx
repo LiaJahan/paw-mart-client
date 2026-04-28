@@ -93,7 +93,7 @@ function PetsSupplies() {
 >
   See Details
 </button>
-console.log("Listings:", listings);
+
           </div>
         ))}
       </div>
