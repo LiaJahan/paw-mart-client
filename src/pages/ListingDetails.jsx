@@ -8,7 +8,6 @@ function ListingDetails() {
 
   const [listing, setListing] = useState(null);
   const [user, setUser] = useState(null);
-
   const [showForm, setShowForm] = useState(false);
 
   const [address, setAddress] = useState("");
@@ -16,39 +15,40 @@ function ListingDetails() {
   const [date, setDate] = useState("");
   const [notes, setNotes] = useState("");
 
-  // get user
   useEffect(() => {
     setUser(auth.currentUser);
   }, []);
 
-  // fetch listing
+  // 🔥 Fetch single listing
   useEffect(() => {
-    const fetchListing = async () => {
+    const fetchOne = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/listings`
+          `${import.meta.env.VITE_API_URL}/listings/${id}`
         );
+        if (!res.ok) throw new Error();
         const data = await res.json();
-
-        const found = data.find((item) => item._id === id);
-        setListing(found);
+        setListing(data);
       } catch {
         toast.error("Failed to load listing");
       }
     };
-
-    fetchListing();
+    fetchOne();
   }, [id]);
 
-  // submit order
   const handleOrder = async (e) => {
     e.preventDefault();
+
+    if (!user) {
+      toast.error("Please login first");
+      return;
+    }
 
     const order = {
       productId: listing._id,
       productName: listing.name,
-      buyerName: user?.displayName || "Anonymous",
-      email: user?.email,
+      buyerName: user.displayName || "Anonymous",
+      email: user.email,
       quantity: listing.category === "Pets" ? 1 : 1,
       price: listing.price,
       address,
@@ -62,15 +62,13 @@ function ListingDetails() {
         `${import.meta.env.VITE_API_URL}/orders`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(order),
         }
       );
 
       if (res.ok) {
-        toast.success("Order placed successfully!");
+        toast.success("Order placed!");
         setShowForm(false);
       } else {
         toast.error("Order failed");
@@ -80,7 +78,7 @@ function ListingDetails() {
     }
   };
 
-  if (!listing) return <p>Loading...</p>;
+  if (!listing) return <p className="text-center mt-10">Loading...</p>;
 
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-6">
@@ -110,46 +108,30 @@ function ListingDetails() {
         Adopt / Order Now
       </button>
 
-      {/* Order Form */}
       {showForm && (
         <form onSubmit={handleOrder} className="space-y-3 border p-4 rounded">
           <input
-            type="text"
             value={user?.displayName || ""}
             readOnly
             className="input input-bordered w-full"
           />
-
           <input
-            type="text"
             value={user?.email || ""}
             readOnly
             className="input input-bordered w-full"
           />
-
           <input
-            type="text"
             value={listing.name}
             readOnly
             className="input input-bordered w-full"
           />
-
           <input
-            type="number"
-            value={listing.category === "Pets" ? 1 : 1}
-            readOnly
-            className="input input-bordered w-full"
-          />
-
-          <input
-            type="text"
             value={listing.price}
             readOnly
             className="input input-bordered w-full"
           />
 
           <input
-            type="text"
             placeholder="Address"
             onChange={(e) => setAddress(e.target.value)}
             className="input input-bordered w-full"
@@ -157,7 +139,6 @@ function ListingDetails() {
           />
 
           <input
-            type="text"
             placeholder="Phone"
             onChange={(e) => setPhone(e.target.value)}
             className="input input-bordered w-full"
@@ -175,7 +156,7 @@ function ListingDetails() {
             placeholder="Additional Notes"
             onChange={(e) => setNotes(e.target.value)}
             className="textarea textarea-bordered w-full"
-          ></textarea>
+          />
 
           <button className="btn btn-success w-full">
             Confirm Order
