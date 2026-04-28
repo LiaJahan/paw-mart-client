@@ -8,7 +8,6 @@ function PetsSupplies() {
 
   const navigate = useNavigate();
 
-  // Fetch listings
   useEffect(() => {
     const fetchListings = async () => {
       try {
@@ -20,29 +19,33 @@ function PetsSupplies() {
 
         const res = await fetch(url);
         const data = await res.json();
-        setListings(data);
+
+        console.log("DATA FROM BACKEND:", data); // 🔍 debug
+
+        setListings(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error("Failed to fetch listings");
+        console.error("Fetch error:", err);
+        setListings([]);
       }
     };
 
     fetchListings();
   }, [category]);
 
-  // Search filter
+  // SAFE filtering (no crash)
   const filteredListings = listings.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
+    (item?.name || "").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="p-4 space-y-6">
-      <h1 className="text-3xl font-bold">Pets & Supplies</h1>
+    <div className="p-4">
+      <h1 className="text-3xl font-bold mb-4">Pets & Supplies</h1>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-3">
+      <div className="flex gap-3 mb-4">
         <input
           type="text"
-          placeholder="Search by name..."
+          placeholder="Search..."
           className="input input-bordered w-full"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -53,7 +56,7 @@ function PetsSupplies() {
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
-          <option value="">All Categories</option>
+          <option value="">All</option>
           <option>Pets</option>
           <option>Pet Food</option>
           <option>Accessories</option>
@@ -61,42 +64,34 @@ function PetsSupplies() {
         </select>
       </div>
 
-      {/* Grid */}
+      {/* Listings */}
       <div className="grid md:grid-cols-3 gap-4">
         {filteredListings.map((item) => (
-          <div
-            key={item._id}
-            className="border p-3 rounded shadow"
-          >
+          <div key={item._id} className="border p-3 rounded">
             <img
               src={item.image}
-              className="h-40 w-full object-cover rounded"
+              alt=""
+              className="h-40 w-full object-cover"
             />
 
-            <h3 className="font-bold mt-2">{item.name}</h3>
+            <h3 className="font-bold">{item.name}</h3>
 
-            <p>{item.category}</p>
-            <p>{item.location}</p>
-
-            <p className="font-semibold">
-              {item.price === 0
-                ? "Free for Adoption"
-                : `$${item.price}`}
-            </p>
-
-            {/* ✅ THIS IS THE IMPORTANT FIX */}
             <button
-  onClick={() => {
-    console.log("clicked", item._id);
-  }}
-  className="btn btn-sm btn-primary mt-2 w-full"
->
-  See Details
-</button>
-
+              onClick={() => {
+                console.log("NAVIGATE:", item._id);
+                navigate(`/listing/${item._id}`);
+              }}
+              className="btn btn-primary mt-2 w-full"
+            >
+              See Details
+            </button>
           </div>
         ))}
       </div>
+
+      {filteredListings.length === 0 && (
+        <p className="text-center mt-10">No listings</p>
+      )}
     </div>
   );
 }
