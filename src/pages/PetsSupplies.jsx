@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function PetsSupplies() {
   const [listings, setListings] = useState([]);
   const [category, setCategory] = useState("");
   const [search, setSearch] = useState("");
+
+  const navigate = useNavigate();
 
   // Fetch listings
   useEffect(() => {
@@ -26,7 +29,7 @@ function PetsSupplies() {
     fetchListings();
   }, [category]);
 
-  // Filter by search (frontend)
+  // Search filter
   const filteredListings = listings.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -35,7 +38,7 @@ function PetsSupplies() {
     <div className="p-4 space-y-6">
       <h1 className="text-3xl font-bold">Pets & Supplies</h1>
 
-      {/* 🔍 Filters */}
+      {/* Filters */}
       <div className="flex flex-col md:flex-row gap-3">
         <input
           type="text"
@@ -58,7 +61,7 @@ function PetsSupplies() {
         </select>
       </div>
 
-      {/* 📦 Grid */}
+      {/* Grid */}
       <div className="grid md:grid-cols-3 gap-4">
         {filteredListings.map((item) => (
           <div
@@ -81,9 +84,16 @@ function PetsSupplies() {
                 : `$${item.price}`}
             </p>
 
-            <button className="btn btn-sm btn-primary mt-2 w-full">
-              See Details
-            </button>
+            {/* ✅ THIS IS THE IMPORTANT FIX */}
+            <button
+  onClick={() => {
+    console.log("clicked", item._id);
+  }}
+  className="btn btn-sm btn-primary mt-2 w-full"
+>
+  See Details
+</button>
+console.log("Listings:", listings);
           </div>
         ))}
       </div>
