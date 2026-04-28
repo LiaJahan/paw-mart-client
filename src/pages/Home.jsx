@@ -26,14 +26,21 @@ function Home() {
     <div className="space-y-10">
 
       {/* 🔥 Banner */}
-      <div className="bg-base-200 p-10 text-center rounded">
-        <h1 className="text-4xl font-bold mb-3">
-          Find Your Furry Friend Today!
-        </h1>
-        <p className="text-lg">
-          Adopt, Don’t Shop — Give a Pet a Home 🐾
-        </p>
-      </div>
+      <div className="relative h-[400px] rounded overflow-hidden">
+  <img
+    src="https://images.unsplash.com/photo-1601758003122-53c40e686a19"
+    className="w-full h-full object-cover"
+  />
+
+  <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-white text-center">
+    <h1 className="text-4xl font-bold mb-3">
+      Find Your Furry Friend Today!
+    </h1>
+    <p className="text-lg">
+      Adopt, Don’t Shop — Give a Pet a Home 🐾
+    </p>
+  </div>
+</div>
 
       {/* 🧩 Categories */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

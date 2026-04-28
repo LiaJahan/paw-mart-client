@@ -8,14 +8,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import AddListing from "./pages/AddListing";
 import MyListings from "./pages/MyListings";
 import Home from "./pages/Home";
-
-function PetsSupplies() {
-  return (
-    <h1 className="text-2xl font-bold">
-      Pets & Supplies Page 🐾
-    </h1>
-  );
-}
+import PetsSupplies from "./pages/PetsSupplies";
 
 function NotFound() {
   return (
@@ -32,31 +25,21 @@ function App() {
 
       <Routes>
         <Route element={<Layout />}>
-          {/* ✅ Home route uses REAL Home.jsx */}
           <Route path="/" element={<Home />} />
 
-          <Route
-            path="/pets-supplies"
-            element={<PetsSupplies />}
-          />
+          {/* ✅ THIS now uses your real file */}
+          <Route path="/pets-supplies" element={<PetsSupplies />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
           <Route element={<PrivateRoute />}>
             <Route path="/add-listing" element={<AddListing />} />
-            <Route
-              path="/my-listings"
-              element={<MyListings />}
-            />
-            <Route
-              path="/my-orders"
-              element={<h2>My Orders Page</h2>}
-            />
+            <Route path="/my-listings" element={<MyListings />} />
+            <Route path="/my-orders" element={<h2>My Orders Page</h2>} />
           </Route>
         </Route>
 
-        {/* 404 page (no navbar/footer) */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
