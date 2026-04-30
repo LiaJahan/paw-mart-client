@@ -13,24 +13,36 @@ function MyListings() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editListing, setEditListing] = useState(null);
 
-  // ✅ Dynamic title
   useEffect(() => {
     document.title = "My Listings | PawMart";
   }, []);
 
-  // Get user
   useEffect(() => {
     setUser(auth.currentUser);
   }, []);
 
-  // Fetch listings
+  // ✅ Default image fallback
+  const getDefaultImage = (category) => {
+    switch (category) {
+      case "Pets":
+        return "https://i.ibb.co/v4jDr2h1/pet-for-adoption.jpg";
+      case "Pet Food":
+        return "https://i.ibb.co/m5dSQG8Z/pet-Food.png";
+      case "Accessories":
+        return "https://i.ibb.co/V7T5XcZ/pet-Accesoris.webp";
+      case "Pet Care Products":
+        return "https://i.ibb.co/cKxgksLp/pet-Care-Products.png";
+      default:
+        return "https://via.placeholder.com/400";
+    }
+  };
+
   const fetchListings = async (email) => {
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/listings?email=${email}`
       );
       const data = await res.json();
-
       setListings(Array.isArray(data) ? data : []);
     } catch {
       toast.error("Failed to fetch listings");
@@ -46,17 +58,13 @@ function MyListings() {
     }
   }, [user, location.key]);
 
-  // ✅ Delete with confirmation
   const handleDelete = async (id) => {
-    const confirmDelete = confirm("Are you sure?");
-    if (!confirmDelete) return;
+    if (!confirm("Are you sure?")) return;
 
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/listings/${id}?email=${user.email}`,
-        {
-          method: "DELETE",
-        }
+        { method: "DELETE" }
       );
 
       if (res.ok) {
@@ -87,22 +95,18 @@ function MyListings() {
         `${import.meta.env.VITE_API_URL}/listings/${editListing._id}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(editListing),
         }
       );
 
       if (res.ok) {
         toast.success("Listing updated!");
-
         setListings((prev) =>
           prev.map((l) =>
             l._id === editListing._id ? editListing : l
           )
         );
-
         setIsModalOpen(false);
       } else {
         toast.error("Update failed");
@@ -112,7 +116,6 @@ function MyListings() {
     }
   };
 
-  // ✅ Spinner
   if (loading) {
     return (
       <div className="flex justify-center mt-20">
@@ -137,6 +140,7 @@ function MyListings() {
         <table className="table w-full">
           <thead>
             <tr>
+              <th>Image</th> {/* ✅ NEW */}
               <th>Name</th>
               <th>Category</th>
               <th>Price</th>
@@ -148,13 +152,31 @@ function MyListings() {
           <tbody>
             {listings.map((listing) => (
               <tr key={listing._id}>
+
+                {/* ✅ IMAGE FIX */}
+                <td>
+                  <img
+                    src={
+                      listing.image && listing.image.startsWith("http")
+                        ? listing.image
+                        : getDefaultImage(listing.category)
+                    }
+                    onError={(e) => {
+                      e.target.src = getDefaultImage(listing.category);
+                    }}
+                    className="w-16 h-16 object-cover rounded"
+                  />
+                </td>
+
                 <td>{listing.name}</td>
                 <td>{listing.category}</td>
+
                 <td>
                   {listing.price === 0
                     ? "Free for Adoption"
                     : `$${listing.price}`}
                 </td>
+
                 <td>{listing.location}</td>
 
                 <td className="space-x-2">
@@ -178,6 +200,7 @@ function MyListings() {
         </table>
       </div>
 
+      {/* ✅ FIXED MODAL (added image field) */}
       {isModalOpen && editListing && (
         <div className="modal modal-open">
           <div className="modal-box">
@@ -185,21 +208,17 @@ function MyListings() {
 
             <form onSubmit={handleUpdate} className="space-y-2">
               <input
-                type="text"
                 name="name"
                 value={editListing.name}
                 onChange={handleChange}
                 className="input input-bordered w-full"
-                required
               />
 
               <input
-                type="text"
                 name="location"
                 value={editListing.location}
                 onChange={handleChange}
                 className="input input-bordered w-full"
-                required
               />
 
               <textarea
@@ -207,7 +226,15 @@ function MyListings() {
                 value={editListing.description}
                 onChange={handleChange}
                 className="textarea textarea-bordered w-full"
-                required
+              />
+
+              {/* ✅ NEW: edit image */}
+              <input
+                name="image"
+                placeholder="Image URL"
+                value={editListing.image || ""}
+                onChange={handleChange}
+                className="input input-bordered w-full"
               />
 
               <div className="modal-action">

@@ -1,179 +1,140 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import banner1 from '../assets/banner1.jpg'
-import banner2 from '../assets/banner2.jpg'
-import banner3 from '../assets/banner3.png'
-
+import banner1 from "../assets/banner1.jpg";
+import banner2 from "../assets/banner2.jpg";
+import banner3 from "../assets/banner3.png";
 
 function Home() {
-  const categories = [
-  { label: "🐶 Pets (Adoption)", value: "Pets" },
-  { label: "🍖 Pet Food", value: "Pet Food" },
-  { label: "🧸 Accessories", value: "Accessories" },
-  { label: "💊 Pet Care Products", value: "Pet Care Products" },
-];
   const navigate = useNavigate();
+
+  const categories = [
+    { label: "🐶 Pets (Adoption)", value: "Pets" },
+    { label: "🍖 Pet Food", value: "Pet Food" },
+    { label: "🧸 Accessories", value: "Accessories" },
+    { label: "💊 Pet Care Products", value: "Pet Care Products" },
+  ];
+
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Dynamic title
+  // ✅ Page title
   useEffect(() => {
     document.title = "Home | PawMart";
   }, []);
 
-  // Fetch recent listings
-  // useEffect(() => {
-  //   const fetchListings = async () => {
-  //     try {
-  //       const res = await fetch(
-  //         `${import.meta.env.VITE_API_URL}/listings?limit=6`
-  //       );
-  //       const data = await res.json();
-
-  //       setListings(Array.isArray(data) ? data : []);
-  //     } catch {
-  //       setListings([]);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchListings();
-  // }, []);
-  const fallbackListings = [
-  {
-    _id: "demo1",
-    name: "Demo Pet",
-    category: "Pets",
-    price: 0,
-    location: "Valencia",
-    image: "https://images.unsplash.com/photo-1558788353-f76d92427f16",
-  },
-];
-
-useEffect(() => {
-  const fetchListings = async () => {
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/listings?limit=6`
-      );
-
-      if (!res.ok) throw new Error();
-
-      const data = await res.json();
-
-      setListings(data);
-    } catch {
-      console.log("Backend OFF → using fallback");
-      setListings(fallbackListings);
-    } finally {
-      setLoading(false);
+  // ✅ Default images (FIXED)
+  const getDefaultImage = (category) => {
+    switch (category) {
+      case "Pets":
+        return "https://i.ibb.co/v4jDr2h1/pet-for-adoption.jpg";
+      case "Pet Food":
+        return "https://i.ibb.co/m5dSQG8Z/pet-Food.png";
+      case "Accessories":
+        return "https://i.ibb.co/V7T5XcZ/pet-Accesoris.webp";
+      case "Pet Care Products":
+        return "https://i.ibb.co/cKxgksLp/pet-Care-Products.png";
+      default:
+        return "https://via.placeholder.com/400";
     }
   };
 
-  fetchListings();
-}, []);
+  // ✅ fallback data (when backend OFF)
+  const fallbackListings = [
+    {
+      _id: "demo1",
+      name: "Demo Pet",
+      category: "Pets",
+      price: 0,
+      location: "Dhaka",
+      image: "",
+    },
+  ];
 
+  // ✅ Fetch listings safely
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/listings?limit=6`
+        );
+
+        if (!res.ok) throw new Error();
+
+        const data = await res.json();
+        setListings(Array.isArray(data) ? data : []);
+      } catch {
+        console.log("Backend OFF → using fallback");
+        setListings(fallbackListings);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchListings();
+  }, []);
+
+  // ✅ Loading UI
   if (loading) {
     return (
       <div className="flex justify-center mt-20">
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
-
-
   }
 
-  
   return (
     <div className="space-y-10">
 
       {/* 🔥 Banner */}
-      
       <div className="carousel w-full rounded-xl overflow-hidden">
 
-  {/* Slide 1 */}
-  <div id="slide1" className="carousel-item relative w-full h-[400px] md:h-[500px]">
-    <img
-      src={banner1}
-      className="w-full h-full object-cover"
-      alt="banner"
-    />
+        {/* Slide 1 */}
+        <div className="carousel-item relative w-full h-[400px] md:h-[500px]">
+          <img src={banner1} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/40 flex justify-center items-center text-white text-center px-4">
+            <h1 className="text-3xl md:text-5xl font-bold">
+              Find Your Furry Friend Today!
+            </h1>
+          </div>
+        </div>
 
-    {/* Overlay */}
-    <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
-      <h1 className="text-3xl md:text-5xl font-bold mb-3">
-        Find Your Furry Friend Today!
-      </h1>
-    </div>
+        {/* Slide 2 */}
+        <div className="carousel-item relative w-full h-[400px] md:h-[500px]">
+          <img src={banner2} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
+            <h1 className="text-3xl md:text-5xl font-bold">
+              Adopt, Don’t Shop
+            </h1>
+            <p>Give a Pet a Home</p>
+          </div>
+        </div>
 
-    {/* Buttons */}
-    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
-      <a href="#slide3" className="btn btn-circle">❮</a>
-      <a href="#slide2" className="btn btn-circle">❯</a>
-    </div>
-  </div>
+        {/* Slide 3 */}
+        <div className="carousel-item relative w-full h-[400px] md:h-[500px]">
+          <img src={banner3} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/40 flex justify-center items-center text-white text-center px-4">
+            <h1 className="text-3xl md:text-5xl font-bold">
+              Because Every Pet Deserves Love
+            </h1>
+          </div>
+        </div>
 
-  {/* Slide 2 */}
-  <div id="slide2" className="carousel-item relative w-full h-[400px] md:h-[500px]">
-    <img
-      src={banner2}
-      className="w-full h-full object-cover"
-      alt="banner"
-    />
-
-    <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
-      <h1 className="text-3xl md:text-5xl font-bold mb-3">
-        Adopt, Don’t Shop
-      </h1>
-      <p>Give a Pet a Home</p>
-    </div>
-
-    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
-      <a href="#slide1" className="btn btn-circle">❮</a>
-      <a href="#slide3" className="btn btn-circle">❯</a>
-    </div>
-  </div>
-
-  {/* Slide 3 */}
-  <div id="slide3" className="carousel-item relative w-full h-[400px] md:h-[500px]">
-    <img
-      src={banner3}
-      className="w-full h-full object-cover"
-      alt="banner"
-    />
-
-    <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
-      <h1 className="text-3xl md:text-5xl font-bold mb-3">
-        Because Every Pet Deserves Love and Care.
-      </h1>
-    </div>
-
-    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
-      <a href="#slide2" className="btn btn-circle">❮</a>
-      <a href="#slide1" className="btn btn-circle">❯</a>
-    </div>
-  </div>
-
-</div>
+      </div>
 
       {/* 🧩 Categories */}
-
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-  {categories.map((cat) => (
-    <div
-      key={cat.value}
-      onClick={() =>
-        navigate(`/category-filtered-product/${cat.value}`)
-      }
-      className="cursor-pointer bg-[#FFC49F] p-5 rounded-xl shadow hover:shadow-lg text-center"
-    >
-      <h2 className="text-2xl">{cat.label}</h2>
-    </div>
-  ))}
-</div>
-      
-
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {categories.map((cat) => (
+          <div
+            key={cat.value}
+            onClick={() =>
+              navigate(`/category-filtered-product/${cat.value}`)
+            }
+            className="cursor-pointer bg-[#FFC49F] p-5 rounded-xl shadow hover:shadow-lg text-center"
+          >
+            <h2 className="text-xl md:text-2xl">{cat.label}</h2>
+          </div>
+        ))}
+      </div>
 
       {/* 🆕 Recent Listings */}
       <div>
@@ -181,15 +142,20 @@ useEffect(() => {
           Recent Listings
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {listings.map((item) => (
-            <div
-              key={item._id}
-              className="border rounded p-3 shadow"
-            >
+            <div key={item._id} className="border rounded p-3 shadow">
+
+              {/* ✅ FINAL IMAGE FIX */}
               <img
-                src={item.image}
-                alt={item.name || "Pet"}
+                src={
+                  item.image && item.image.startsWith("http")
+                    ? item.image
+                    : getDefaultImage(item.category)
+                }
+                onError={(e) => {
+                  e.target.src = getDefaultImage(item.category);
+                }}
                 className="h-40 w-full object-cover rounded"
               />
 
@@ -218,12 +184,12 @@ useEffect(() => {
 
         {listings.length === 0 && (
           <p className="text-center mt-5">
-            reload server once!!
+            No listings available
           </p>
         )}
       </div>
 
-      {/* 💡 Extra Section 1 */}
+      {/* 💡 Extra Sections */}
       <div className="bg-[#FFC49F] p-6 rounded text-center">
         <h2 className="text-xl font-bold mb-2">
           Why Adopt from PawMart?
@@ -233,7 +199,6 @@ useEffect(() => {
         </p>
       </div>
 
-      {/* 💡 Extra Section 2 */}
       <div className="bg-[#FFC49F] p-6 rounded text-center">
         <h2 className="text-xl font-bold mb-2">
           Meet Our Pet Heroes

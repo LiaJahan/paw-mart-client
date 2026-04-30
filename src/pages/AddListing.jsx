@@ -16,12 +16,12 @@ function AddListing() {
   const [image, setImage] = useState("");
   const [date, setDate] = useState("");
 
-  // ✅ dynamic title (correct place)
+  // ✅ Page title
   useEffect(() => {
     document.title = "Add Listing | PawMart";
   }, []);
 
-  // get current user
+  // ✅ Get current user
   useEffect(() => {
     setUser(auth.currentUser);
   }, []);
@@ -34,18 +34,19 @@ function AddListing() {
       return;
     }
 
-    if (!name || !location || !description || !image || !date) {
-      toast.error("Please fill all fields");
+    // ✅ Required fields (image NOT required)
+    if (!name || !location || !description || !date) {
+      toast.error("Please fill all required fields");
       return;
     }
 
     const listing = {
       name,
       category,
-      price: category === "🐶 Pets (Adoption)" ? 0 : Number(price),
+      price: category === "Pets" ? 0 : Number(price),
       location,
       description,
-      image,
+      image: image || "", // ✅ FIXED
       date,
       email: user.email,
     };
@@ -82,7 +83,7 @@ function AddListing() {
     }
   };
 
-  // loading UI (better UX)
+  // ✅ Loading UI
   if (!user) {
     return (
       <div className="flex justify-center mt-10">
@@ -145,13 +146,13 @@ function AddListing() {
           required
         ></textarea>
 
+        {/* ✅ Optional image */}
         <input
           type="text"
-          placeholder="Image URL"
+          placeholder="Image URL (optional)"
           value={image}
           onChange={(e) => setImage(e.target.value)}
           className="input input-bordered w-full"
-          required
         />
 
         <input
