@@ -15,6 +15,27 @@ function ListingDetails() {
   const [date, setDate] = useState("");
   const [notes, setNotes] = useState("");
 
+  // image
+  const getDefaultImage = (category) => {
+  switch (category) {
+    case "Pets":
+      return "https://i.ibb.co/v4jDr2h1/pet-for-adoption.jpg";
+    case "Pet Food":
+      return "https://i.ibb.co/m5dSQG8Z/pet-Food.png";
+    case "Accessories":
+      return "https://i.ibb.co/V7T5XcZ/pet-Accesoris.webp";
+    case "Pet Care Products":
+      return "https://i.ibb.co/cKxgksLp/pet-Care-Products.png";
+    default:
+      return "https://via.placeholder.com/400";
+  }
+};
+
+const imageSrc =
+  listing?.image && listing.image.startsWith("http")
+    ? listing.image
+    : getDefaultImage(listing?.category);
+
   // ✅ Dynamic title
   useEffect(() => {
     document.title = "Listing Details | PawMart";
@@ -98,10 +119,12 @@ function ListingDetails() {
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-6">
       <img
-        src={listing.image}
-        alt={listing.name || "Listing"}
-        className="w-full h-80 object-cover rounded"
-      />
+  src={imageSrc}
+  onError={(e) => {
+    e.target.src = getDefaultImage(listing?.category);
+  }}
+  className="w-full h-80 object-cover rounded"
+/>
 
       <h1 className="text-3xl font-bold">{listing.name}</h1>
 
