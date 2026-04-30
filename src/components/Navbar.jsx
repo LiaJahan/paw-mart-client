@@ -4,14 +4,14 @@ import { auth } from "../firebase";
 
 function Navbar({ user }) {
   return (
-    <nav className="bg-blue-500 text-white p-5 flex justify-between items-center">
+    <nav className="bg-[#C19A6B] text-black p-5 flex justify-between items-center">
       
-      <div className="font-bold text-xl">
-        <Link to="/">PawMart 🐾</Link>
+      <div className="font-bold text-3xl">
+        <Link to="/">PawMart 🐕🐾</Link>
       </div>
 
       
-      <div className="flex gap-5">
+      <div className="flex font-semibold text-xl gap-5">
         <Link to="/">Home</Link>
         <Link to="/pets-supplies">Pets & Supplies</Link>
 
@@ -46,8 +46,8 @@ function Navbar({ user }) {
           </>
         ) : (
           <>
-            <Link to="/login" className="btn btn-sm btn-primary">Login</Link>
-            <Link to="/register" className="btn btn-sm btn-secondary">Register</Link>
+            <Link to="/login" className="btn btn-xl font-semibold text-xl btn-primary">Login</Link>
+            <Link to="/register" className="btn btn-xl btn-secondary font-semibold text-xl">Register</Link>
           </>
         )}
 

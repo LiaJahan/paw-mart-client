@@ -5,10 +5,10 @@ Paw-Mart is a website dedicated to pet adoption and pet accessories. Users can b
 
 # Features
 
-1.  Browse pets available for adoption
-2.  Purchase pet accessories
+1.  Browse and check available pets for adoption
+2.  Purchase pet accessories (like : toys and foods)
 3.  User authentication and account management
-4.  Responsive and interactive UI
+4.  Responsive and interactive UI, URL : http://localhost:5173/
 
 -----------------------------------------------------------------------------------------------
 

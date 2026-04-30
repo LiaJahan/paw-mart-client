@@ -42,7 +42,7 @@ function AddListing() {
     const listing = {
       name,
       category,
-      price: category === "Pets" ? 0 : Number(price),
+      price: category === "🐶 Pets (Adoption)" ? 0 : Number(price),
       location,
       description,
       image,

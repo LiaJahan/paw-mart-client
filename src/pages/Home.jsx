@@ -1,7 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import banner1 from '../assets/banner1.jpg'
+import banner2 from '../assets/banner2.jpg'
+import banner3 from '../assets/banner3.png'
+
 
 function Home() {
+  const categories = [
+  { label: "🐶 Pets (Adoption)", value: "Pets" },
+  { label: "🍖 Pet Food", value: "Pet Food" },
+  { label: "🧸 Accessories", value: "Accessories" },
+  { label: "💊 Pet Care Products", value: "Pet Care Products" },
+];
   const navigate = useNavigate();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,24 +22,57 @@ function Home() {
   }, []);
 
   // Fetch recent listings
-  useEffect(() => {
-    const fetchListings = async () => {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/listings?limit=6`
-        );
-        const data = await res.json();
+  // useEffect(() => {
+  //   const fetchListings = async () => {
+  //     try {
+  //       const res = await fetch(
+  //         `${import.meta.env.VITE_API_URL}/listings?limit=6`
+  //       );
+  //       const data = await res.json();
 
-        setListings(Array.isArray(data) ? data : []);
-      } catch {
-        setListings([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       setListings(Array.isArray(data) ? data : []);
+  //     } catch {
+  //       setListings([]);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchListings();
-  }, []);
+  //   fetchListings();
+  // }, []);
+  const fallbackListings = [
+  {
+    _id: "demo1",
+    name: "Demo Pet",
+    category: "Pets",
+    price: 0,
+    location: "Valencia",
+    image: "https://images.unsplash.com/photo-1558788353-f76d92427f16",
+  },
+];
+
+useEffect(() => {
+  const fetchListings = async () => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/listings?limit=6`
+      );
+
+      if (!res.ok) throw new Error();
+
+      const data = await res.json();
+
+      setListings(data);
+    } catch {
+      console.log("Backend OFF → using fallback");
+      setListings(fallbackListings);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchListings();
+}, []);
 
   if (loading) {
     return (
@@ -37,48 +80,100 @@ function Home() {
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
+
+
   }
 
+  
   return (
     <div className="space-y-10">
 
       {/* 🔥 Banner */}
-      <div className="relative h-[400px] rounded overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1601758003122-53c40e686a19"
-          alt="Pets Banner"
-          className="w-full h-full object-cover"
-        />
+      
+      <div className="carousel w-full rounded-xl overflow-hidden">
 
-        <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-white text-center">
-          <h1 className="text-4xl font-bold mb-3">
-            Find Your Furry Friend Today!
-          </h1>
-          <p className="text-lg">
-            Adopt, Don’t Shop — Give a Pet a Home 🐾
-          </p>
-        </div>
-      </div>
+  {/* Slide 1 */}
+  <div id="slide1" className="carousel-item relative w-full h-[400px] md:h-[500px]">
+    <img
+      src={banner1}
+      className="w-full h-full object-cover"
+      alt="banner"
+    />
+
+    {/* Overlay */}
+    <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
+      <h1 className="text-3xl md:text-5xl font-bold mb-3">
+        Find Your Furry Friend Today!
+      </h1>
+    </div>
+
+    {/* Buttons */}
+    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
+      <a href="#slide3" className="btn btn-circle">❮</a>
+      <a href="#slide2" className="btn btn-circle">❯</a>
+    </div>
+  </div>
+
+  {/* Slide 2 */}
+  <div id="slide2" className="carousel-item relative w-full h-[400px] md:h-[500px]">
+    <img
+      src={banner2}
+      className="w-full h-full object-cover"
+      alt="banner"
+    />
+
+    <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
+      <h1 className="text-3xl md:text-5xl font-bold mb-3">
+        Adopt, Don’t Shop
+      </h1>
+      <p>Give a Pet a Home</p>
+    </div>
+
+    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
+      <a href="#slide1" className="btn btn-circle">❮</a>
+      <a href="#slide3" className="btn btn-circle">❯</a>
+    </div>
+  </div>
+
+  {/* Slide 3 */}
+  <div id="slide3" className="carousel-item relative w-full h-[400px] md:h-[500px]">
+    <img
+      src={banner3}
+      className="w-full h-full object-cover"
+      alt="banner"
+    />
+
+    <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
+      <h1 className="text-3xl md:text-5xl font-bold mb-3">
+        Because Every Pet Deserves Love and Care.
+      </h1>
+    </div>
+
+    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
+      <a href="#slide2" className="btn btn-circle">❮</a>
+      <a href="#slide1" className="btn btn-circle">❯</a>
+    </div>
+  </div>
+
+</div>
 
       {/* 🧩 Categories */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          "Pets",
-          "Pet Food",
-          "Accessories",
-          "Pet Care Products",
-        ].map((cat) => (
-          <div
-            key={cat}
-            onClick={() =>
-              navigate(`/category-filtered-product/${cat}`)
-            }
-            className="cursor-pointer p-5 border rounded text-center hover:bg-base-200"
-          >
-            <h2 className="font-bold">{cat}</h2>
-          </div>
-        ))}
-      </div>
+
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+  {categories.map((cat) => (
+    <div
+      key={cat.value}
+      onClick={() =>
+        navigate(`/category-filtered-product/${cat.value}`)
+      }
+      className="cursor-pointer bg-[#FFC49F] p-5 rounded-xl shadow hover:shadow-lg text-center"
+    >
+      <h2 className="text-2xl">{cat.label}</h2>
+    </div>
+  ))}
+</div>
+      
+
 
       {/* 🆕 Recent Listings */}
       <div>
@@ -123,13 +218,13 @@ function Home() {
 
         {listings.length === 0 && (
           <p className="text-center mt-5">
-            No recent listings
+            reload server once!!
           </p>
         )}
       </div>
 
       {/* 💡 Extra Section 1 */}
-      <div className="bg-base-200 p-6 rounded text-center">
+      <div className="bg-[#FFC49F] p-6 rounded text-center">
         <h2 className="text-xl font-bold mb-2">
           Why Adopt from PawMart?
         </h2>
@@ -139,7 +234,7 @@ function Home() {
       </div>
 
       {/* 💡 Extra Section 2 */}
-      <div className="bg-base-200 p-6 rounded text-center">
+      <div className="bg-[#FFC49F] p-6 rounded text-center">
         <h2 className="text-xl font-bold mb-2">
           Meet Our Pet Heroes
         </h2>

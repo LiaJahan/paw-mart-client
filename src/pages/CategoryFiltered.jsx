@@ -1,58 +1,43 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import categoryData from "../data/categoryData";
 
 function CategoryFiltered() {
   const { categoryName } = useParams();
-  const [listings, setListings] = useState([]);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    document.title = `${categoryName} | PawMart`;
-
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/listings?category=${categoryName}`
-        );
-        const data = await res.json();
-        setListings(Array.isArray(data) ? data : []);
-      } catch {
-        setListings([]);
-      }
-    };
-
-    fetchData();
-  }, [categoryName]);
+  const filtered = categoryData.filter(
+    (item) => item.category === categoryName
+  );
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-4">
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      <h1 className="text-3xl font-bold mb-6">
         {categoryName}
       </h1>
 
-      <div className="grid md:grid-cols-3 gap-4">
-        {listings.map((item) => (
-          <div key={item._id} className="border p-3 rounded">
+      {/* ✅ 3-column grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {filtered.map((item) => (
+          <div
+            key={item._id}
+            className="border rounded-lg p-3 shadow hover:shadow-lg"
+          >
             <img
               src={item.image}
-              className="h-40 w-full object-cover"
+              className="h-40 w-full object-cover rounded"
             />
 
-            <h3 className="font-bold">{item.name}</h3>
+            <h3 className="font-bold mt-2">{item.name}</h3>
 
-            <button
-              onClick={() => navigate(`/listing/${item._id}`)}
-              className="btn btn-primary mt-2 w-full"
-            >
-              See Details
-            </button>
+            <p>{item.location}</p>
+
+            <p className="font-semibold">
+              {item.price === 0
+                ? "Free for Adoption"
+                : `BDT ${item.price}`}
+            </p>
           </div>
         ))}
       </div>
-
-      {listings.length === 0 && (
-        <p className="text-center mt-10">No items found</p>
-      )}
     </div>
   );
 }
