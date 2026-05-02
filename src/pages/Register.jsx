@@ -16,7 +16,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [photoURL, setPhotoURL] = useState("");
 
-  // ✅ Dynamic title
+  //  Dynamic title
   useEffect(() => {
     document.title = "Register | PawMart";
   }, []);
@@ -24,7 +24,7 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // ✅ Password validation (REQUIRED)
+    //  Password validation (REQUIRED)
     if (!/[A-Z]/.test(password)) {
       toast.error("Must include uppercase letter");
       return;
@@ -51,7 +51,7 @@ function Register() {
 
       toast.success("Account created successfully!");
 
-      // ✅ redirect
+      //  redirect
       navigate("/");
     } catch (error) {
       // cleaner messages
@@ -127,7 +127,7 @@ function Register() {
         Register with Google
       </button>
 
-      {/* ✅ Required link */}
+      {/* Required link */}
       <p className="text-center mt-4">
         Already have an account?{" "}
         <span

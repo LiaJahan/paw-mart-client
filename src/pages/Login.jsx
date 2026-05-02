@@ -13,7 +13,7 @@ function Login() {
 
   const navigate = useNavigate();
 
-  // ✅ Dynamic title
+  // Dynamic title
   useEffect(() => {
     document.title = "Login | PawMart";
   }, []);
@@ -26,10 +26,10 @@ function Login() {
 
       toast.success("Logged in successfully!");
 
-      // ✅ redirect after login
+      // redirect after login
       navigate("/");
     } catch (error) {
-      // ✅ cleaner error message
+      // cleaner error message
       if (error.code === "auth/invalid-credential") {
         toast.error("Invalid email or password");
       } else {
@@ -44,7 +44,7 @@ function Login() {
 
       toast.success("Logged in with Google!");
 
-      // ✅ redirect
+      // redirect
       navigate("/");
     } catch {
       toast.error("Google login failed");
@@ -86,7 +86,7 @@ function Login() {
         Login with Google
       </button>
 
-      {/* ✅ Required link */}
+      {/* Required link */}
       <p className="text-center mt-4">
         Don’t have an account?{" "}
         <span

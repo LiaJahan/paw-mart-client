@@ -7,7 +7,7 @@ function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Dynamic title
+  // Dynamic title
   useEffect(() => {
     document.title = "My Orders | PawMart";
   }, []);
@@ -54,7 +54,7 @@ function MyOrders() {
     doc.save("orders.pdf");
   };
 
-  // ✅ Loading spinner
+  //  Loading spinner
   if (loading) {
     return (
       <div className="flex justify-center mt-20">
@@ -63,7 +63,7 @@ function MyOrders() {
     );
   }
 
-  // ✅ User check
+  //  User check
   if (!auth.currentUser) {
     return <p className="text-center mt-10">Please login to see orders</p>;
   }

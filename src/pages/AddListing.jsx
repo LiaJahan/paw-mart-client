@@ -16,12 +16,12 @@ function AddListing() {
   const [image, setImage] = useState("");
   const [date, setDate] = useState("");
 
-  // ✅ Page title
+  //  Page title
   useEffect(() => {
     document.title = "Add Listing | PawMart";
   }, []);
 
-  // ✅ Get current user
+  // Get current user
   useEffect(() => {
     setUser(auth.currentUser);
   }, []);
@@ -34,7 +34,7 @@ function AddListing() {
       return;
     }
 
-    // ✅ Required fields (image NOT required)
+    // Required fields (image NOT required)
     if (!name || !location || !description || !date) {
       toast.error("Please fill all required fields");
       return;
@@ -46,7 +46,7 @@ function AddListing() {
       price: category === "Pets" ? 0 : Number(price),
       location,
       description,
-      image: image || "", // ✅ FIXED
+      image: image || "", //  FIXED
       date,
       email: user.email,
     };
@@ -83,7 +83,7 @@ function AddListing() {
     }
   };
 
-  // ✅ Loading UI
+  // Loading UI
   if (!user) {
     return (
       <div className="flex justify-center mt-10">
@@ -146,7 +146,7 @@ function AddListing() {
           required
         ></textarea>
 
-        {/* ✅ Optional image */}
+        {/* Optional image */}
         <input
           type="text"
           placeholder="Image URL (optional)"

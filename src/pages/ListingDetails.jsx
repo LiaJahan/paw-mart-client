@@ -36,7 +36,7 @@ const imageSrc =
     ? listing.image
     : getDefaultImage(listing?.category);
 
-  // ✅ Dynamic title
+  // Dynamic title
   useEffect(() => {
     document.title = "Listing Details | PawMart";
   }, []);
@@ -107,7 +107,7 @@ const imageSrc =
     }
   };
 
-  // ✅ Spinner instead of text
+  // Spinner instead of text
   if (!listing) {
     return (
       <div className="flex justify-center mt-20">

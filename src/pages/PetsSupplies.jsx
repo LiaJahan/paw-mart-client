@@ -9,12 +9,12 @@ function PetsSupplies() {
 
   const navigate = useNavigate();
 
-  // ✅ Dynamic title
+  // Dynamic title
   useEffect(() => {
     document.title = "Pets & Supplies | PawMart";
   }, []);
 
-  // ✅ Default image fallback
+  // Default image fallback
   const getDefaultImage = (category) => {
     switch (category) {
       case "Pets":
@@ -30,7 +30,7 @@ function PetsSupplies() {
     }
   };
 
-  // ✅ Fetch listings
+  // Fetch listings
   useEffect(() => {
     const fetchListings = async () => {
       try {
@@ -58,12 +58,12 @@ function PetsSupplies() {
     fetchListings();
   }, [category]);
 
-  // ✅ Search filter
+  // Search filter
   const filteredListings = listings.filter((item) =>
     (item?.name || "").toLowerCase().includes(search.toLowerCase())
   );
 
-  // ✅ Loading UI
+  // Loading UI
   if (loading) {
     return (
       <div className="flex justify-center mt-20">

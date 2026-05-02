@@ -11,7 +11,7 @@ import Register from "./pages/Register";
 import AddListing from "./pages/AddListing";
 import MyListings from "./pages/MyListings";
 import MyOrders from "./pages/MyOrders";
-import CategoryFiltered from "./pages/CategoryFiltered"; // ✅ IMPORTANT
+import CategoryFiltered from "./pages/CategoryFiltered"; // IMPORTANT
 
 // Components
 import PrivateRoute from "./components/PrivateRoute";
@@ -38,7 +38,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/pets-supplies" element={<PetsSupplies />} />
 
-          {/* ✅ REQUIRED ROUTE */}
+          {/* REQUIRED ROUTE */}
           <Route
             path="/category-filtered-product/:categoryName"
             element={<CategoryFiltered />}

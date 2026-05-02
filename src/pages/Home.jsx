@@ -17,12 +17,12 @@ function Home() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Page title
+  // Page title
   useEffect(() => {
     document.title = "Home | PawMart";
   }, []);
 
-  // ✅ Default images (FIXED)
+  // Default images (FIXED)
   const getDefaultImage = (category) => {
     switch (category) {
       case "Pets":
@@ -38,7 +38,7 @@ function Home() {
     }
   };
 
-  // ✅ fallback data (when backend OFF)
+  //  fallback data (when backend OFF)
   const fallbackListings = [
     {
       _id: "demo1",
@@ -50,7 +50,7 @@ function Home() {
     },
   ];
 
-  // ✅ Fetch listings safely
+  //  Fetch listings safely
   useEffect(() => {
     const fetchListings = async () => {
       try {
@@ -71,7 +71,7 @@ function Home() {
     fetchListings();
   }, []);
 
-  // ✅ Loading UI
+  // Loading UI
   if (loading) {
     return (
       <div className="flex justify-center mt-20">
@@ -83,7 +83,7 @@ function Home() {
   return (
     <div className="space-y-10">
 
-      {/* 🔥 Banner */}
+      {/* Banner */}
      <div className="carousel w-full rounded-xl overflow-hidden">
 
   {/* Slide 1 */}
@@ -137,7 +137,7 @@ function Home() {
 
 </div>
 
-      {/* 🧩 Categories */}
+      {/* Categories */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {categories.map((cat) => (
           <div
@@ -152,7 +152,7 @@ function Home() {
         ))}
       </div>
 
-      {/* 🆕 Recent Listings */}
+      {/* Recent Listings */}
       <div>
         <h2 className="text-2xl font-bold mb-4">
           Recent Listings
@@ -205,7 +205,7 @@ function Home() {
         )}
       </div>
 
-      {/* 💡 Extra Sections */}
+      {/* Extra Sections */}
       <div className="bg-[#FFC49F] p-6 rounded text-center">
         <h2 className="text-xl font-bold mb-2">
           Why Adopt from PawMart?

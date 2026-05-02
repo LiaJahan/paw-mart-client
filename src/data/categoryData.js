@@ -12,7 +12,7 @@ const bdLocations = [
 ];
 
 const categoryData = [
-  // 🐶 Pets
+  // Pets
   ...Array.from({ length: 9 }, (_, i) => ({
     _id: `pet-${i}`,
     name: `Pet ${i + 1}`,
@@ -22,7 +22,7 @@ const categoryData = [
     image: pet,
   })),
 
-  // 🍖 Pet Food
+  // Pet Food
   ...Array.from({ length: 9 }, (_, i) => ({
     _id: `food-${i}`,
     name: `Pet Food ${i + 1}`,
@@ -32,7 +32,7 @@ const categoryData = [
     image: food,
   })),
 
-  // 🧸 Accessories
+  // Accessories
   ...Array.from({ length: 9 }, (_, i) => ({
     _id: `acc-${i}`,
     name: `Accessory ${i + 1}`,
@@ -42,7 +42,7 @@ const categoryData = [
     image: toy,
   })),
 
-  // 💊 Pet Care
+  //  Pet Care
   ...Array.from({ length: 9 }, (_, i) => ({
     _id: `care-${i}`,
     name: `Care Product ${i + 1}`,

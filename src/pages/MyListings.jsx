@@ -21,7 +21,7 @@ function MyListings() {
     setUser(auth.currentUser);
   }, []);
 
-  // ✅ Default image fallback
+  // Default image fallback
   const getDefaultImage = (category) => {
     switch (category) {
       case "Pets":
@@ -140,7 +140,7 @@ function MyListings() {
         <table className="table w-full">
           <thead>
             <tr>
-              <th>Image</th> {/* ✅ NEW */}
+              <th>Image</th> {/* NEW */}
               <th>Name</th>
               <th>Category</th>
               <th>Price</th>
@@ -153,7 +153,7 @@ function MyListings() {
             {listings.map((listing) => (
               <tr key={listing._id}>
 
-                {/* ✅ IMAGE FIX */}
+                {/* IMAGE FIX */}
                 <td>
                   <img
                     src={
@@ -200,7 +200,7 @@ function MyListings() {
         </table>
       </div>
 
-      {/* ✅ FIXED MODAL (added image field) */}
+      {/* FIXED MODAL (added image field) */}
       {isModalOpen && editListing && (
         <div className="modal modal-open">
           <div className="modal-box">
@@ -228,7 +228,7 @@ function MyListings() {
                 className="textarea textarea-bordered w-full"
               />
 
-              {/* ✅ NEW: edit image */}
+              {/* NEW: edit image */}
               <input
                 name="image"
                 placeholder="Image URL"
