@@ -95,35 +95,56 @@ function Home() {
       {/* Banner */}
       <div className="carousel w-full rounded-xl overflow-hidden">
 
-        <div className="carousel-item relative w-full h-[400px] md:h-[500px]">
-          <img src={banner1} className="w-full h-full object-cover" alt="banner1" />
-          <div className="absolute inset-0 bg-black/40 flex justify-center items-center text-white text-center px-4">
-            <h1 className="text-3xl md:text-5xl font-bold">
-              Find Your Furry Friend Today!
-            </h1>
-          </div>
-        </div>
+  {/* Slide 1 */}
+  <div id="slide1" className="carousel-item relative w-full h-[400px] md:h-[500px]">
+    <img src={banner1} className="w-full h-full object-cover" />
 
-        <div className="carousel-item relative w-full h-[400px] md:h-[500px]">
-          <img src={banner2} className="w-full h-full object-cover" alt="banner2" />
-          <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
-            <h1 className="text-3xl md:text-5xl font-bold">
-              Adopt, Don’t Shop
-            </h1>
-            <p>Give a Pet a Home</p>
-          </div>
-        </div>
+    <div className="absolute inset-0 bg-black/40 flex justify-center items-center text-white text-center px-4">
+      <h1 className="text-3xl md:text-5xl font-bold">
+        Find Your Furry Friend Today!
+      </h1>
+    </div>
 
-        <div className="carousel-item relative w-full h-[400px] md:h-[500px]">
-          <img src={banner3} className="w-full h-full object-cover" alt="banner3" />
-          <div className="absolute inset-0 bg-black/40 flex justify-center items-center text-white text-center px-4">
-            <h1 className="text-3xl md:text-5xl font-bold">
-              Because Every Pet Deserves Love
-            </h1>
-          </div>
-        </div>
+    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
+      <a href="#slide3" className="btn btn-circle">❮</a>
+      <a href="#slide2" className="btn btn-circle">❯</a>
+    </div>
+  </div>
 
-      </div>
+  {/* Slide 2 */}
+  <div id="slide2" className="carousel-item relative w-full h-[400px] md:h-[500px]">
+    <img src={banner2} className="w-full h-full object-cover" />
+
+    <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
+      <h1 className="text-3xl md:text-5xl font-bold">
+        Adopt, Don’t Shop
+      </h1>
+      <p>Give a Pet a Home</p>
+    </div>
+
+    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
+      <a href="#slide1" className="btn btn-circle">❮</a>
+      <a href="#slide3" className="btn btn-circle">❯</a>
+    </div>
+  </div>
+
+  {/* Slide 3 */}
+  <div id="slide3" className="carousel-item relative w-full h-[400px] md:h-[500px]">
+    <img src={banner3} className="w-full h-full object-cover" />
+
+    <div className="absolute inset-0 bg-black/40 flex justify-center items-center text-white text-center px-4">
+      <h1 className="text-3xl md:text-5xl font-bold">
+        Because Every Pet Deserves Love
+      </h1>
+    </div>
+
+    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
+      <a href="#slide2" className="btn btn-circle">❮</a>
+      <a href="#slide1" className="btn btn-circle">❯</a>
+    </div>
+  </div>
+
+</div>
 
       {/* Categories */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
