@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 
 function AddListing() {
   const navigate = useNavigate();
@@ -16,14 +17,18 @@ function AddListing() {
   const [image, setImage] = useState("");
   const [date, setDate] = useState("");
 
-  //  Page title
+  // ✅ Page title
   useEffect(() => {
     document.title = "Add Listing | PawMart";
   }, []);
 
-  // Get current user
+  // ✅ FIXED: Proper Firebase auth listener
   useEffect(() => {
-    setUser(auth.currentUser);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -34,7 +39,6 @@ function AddListing() {
       return;
     }
 
-    // Required fields (image NOT required)
     if (!name || !location || !description || !date) {
       toast.error("Please fill all required fields");
       return;
@@ -46,7 +50,7 @@ function AddListing() {
       price: category === "Pets" ? 0 : Number(price),
       location,
       description,
-      image: image || "", //  FIXED
+      image: image || "", // optional
       date,
       email: user.email,
     };
@@ -76,14 +80,19 @@ function AddListing() {
         setImage("");
         setDate("");
       } else {
-        toast.error("Failed to add listing");
+        const errorData = await res.json();
+
+        console.log("BACKEND ERROR:", errorData);
+
+        toast.error(errorData.message || "Failed to add listing");
       }
-    } catch {
+    } catch (err) {
+      console.error("FETCH ERROR:", err);
       toast.error("Server error");
     }
   };
 
-  // Loading UI
+  // ✅ Loading state
   if (!user) {
     return (
       <div className="flex justify-center mt-10">
@@ -146,7 +155,6 @@ function AddListing() {
           required
         ></textarea>
 
-        {/* Optional image */}
         <input
           type="text"
           placeholder="Image URL (optional)"
