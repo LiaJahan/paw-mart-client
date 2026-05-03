@@ -17,12 +17,12 @@ function Home() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Page title
+  //  Page title
   useEffect(() => {
     document.title = "Home | PawMart";
   }, []);
 
-  // Default images (FIXED)
+  //  Default images
   const getDefaultImage = (category) => {
     switch (category) {
       case "Pets":
@@ -38,7 +38,7 @@ function Home() {
     }
   };
 
-  //  fallback data (when backend OFF)
+  //  fallback
   const fallbackListings = [
     {
       _id: "demo1",
@@ -50,17 +50,23 @@ function Home() {
     },
   ];
 
-  //  Fetch listings safely
+  // FIXED FETCH
   useEffect(() => {
     const fetchListings = async () => {
       try {
-         
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/listings?limit=6`
+        );
 
         if (!res.ok) throw new Error();
 
         const data = await res.json();
-        setListings(Array.isArray(data) ? data : []);
-      } catch {
+
+        //  LIMIT AGAIN (safety)
+        const limitedData = Array.isArray(data) ? data.slice(0, 6) : [];
+
+        setListings(limitedData);
+      } catch (error) {
         console.log("Backend OFF → using fallback");
         setListings(fallbackListings);
       } finally {
@@ -71,7 +77,7 @@ function Home() {
     fetchListings();
   }, []);
 
-  // Loading UI
+  //  Loading UI
   if (loading) {
     return (
       <div className="flex justify-center mt-20">
@@ -83,59 +89,59 @@ function Home() {
   return (
     <div className="space-y-10">
 
-      {/* Banner */}
-     <div className="carousel w-full rounded-xl overflow-hidden">
+      {/*  Banner */}
+      <div className="carousel w-full rounded-xl overflow-hidden">
 
-  {/* Slide 1 */}
-  <div id="slide1" className="carousel-item relative w-full h-[400px] md:h-[500px]">
-    <img src={banner1} className="w-full h-full object-cover" />
+        {/* Slide 1 */}
+        <div id="slide1" className="carousel-item relative w-full h-[400px] md:h-[500px]">
+          <img src={banner1} className="w-full h-full object-cover" />
 
-    <div className="absolute inset-0 bg-black/40 flex justify-center items-center text-white text-center px-4">
-      <h1 className="text-3xl md:text-5xl font-bold">
-        Find Your Furry Friend Today!
-      </h1>
-    </div>
+          <div className="absolute inset-0 bg-black/40 flex justify-center items-center text-white text-center px-4">
+            <h1 className="text-3xl md:text-5xl font-bold">
+              Find Your Furry Friend Today!
+            </h1>
+          </div>
 
-    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
-      <a href="#slide3" className="btn btn-circle">❮</a>
-      <a href="#slide2" className="btn btn-circle">❯</a>
-    </div>
-  </div>
+          <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
+            <a href="#slide3" className="btn btn-circle">❮</a>
+            <a href="#slide2" className="btn btn-circle">❯</a>
+          </div>
+        </div>
 
-  {/* Slide 2 */}
-  <div id="slide2" className="carousel-item relative w-full h-[400px] md:h-[500px]">
-    <img src={banner2} className="w-full h-full object-cover" />
+        {/* Slide 2 */}
+        <div id="slide2" className="carousel-item relative w-full h-[400px] md:h-[500px]">
+          <img src={banner2} className="w-full h-full object-cover" />
 
-    <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
-      <h1 className="text-3xl md:text-5xl font-bold">
-        Adopt, Don’t Shop
-      </h1>
-      <p>Give a Pet a Home</p>
-    </div>
+          <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
+            <h1 className="text-3xl md:text-5xl font-bold">
+              Adopt, Don’t Shop
+            </h1>
+            <p>Give a Pet a Home</p>
+          </div>
 
-    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
-      <a href="#slide1" className="btn btn-circle">❮</a>
-      <a href="#slide3" className="btn btn-circle">❯</a>
-    </div>
-  </div>
+          <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
+            <a href="#slide1" className="btn btn-circle">❮</a>
+            <a href="#slide3" className="btn btn-circle">❯</a>
+          </div>
+        </div>
 
-  {/* Slide 3 */}
-  <div id="slide3" className="carousel-item relative w-full h-[400px] md:h-[500px]">
-    <img src={banner3} className="w-full h-full object-cover" />
+        {/* Slide 3 */}
+        <div id="slide3" className="carousel-item relative w-full h-[400px] md:h-[500px]">
+          <img src={banner3} className="w-full h-full object-cover" />
 
-    <div className="absolute inset-0 bg-black/40 flex justify-center items-center text-white text-center px-4">
-      <h1 className="text-3xl md:text-5xl font-bold">
-        Because Every Pet Deserves Love
-      </h1>
-    </div>
+          <div className="absolute inset-0 bg-black/40 flex justify-center items-center text-white text-center px-4">
+            <h1 className="text-3xl md:text-5xl font-bold">
+              Because Every Pet Deserves Love
+            </h1>
+          </div>
 
-    <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
-      <a href="#slide2" className="btn btn-circle">❮</a>
-      <a href="#slide1" className="btn btn-circle">❯</a>
-    </div>
-  </div>
+          <div className="absolute left-5 right-5 top-1/2 flex justify-between -translate-y-1/2">
+            <a href="#slide2" className="btn btn-circle">❮</a>
+            <a href="#slide1" className="btn btn-circle">❯</a>
+          </div>
+        </div>
 
-</div>
+      </div>
 
       {/* Categories */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -162,7 +168,6 @@ function Home() {
           {listings.map((item) => (
             <div key={item._id} className="border rounded p-3 shadow">
 
-              {/* ✅ FINAL IMAGE FIX */}
               <img
                 src={
                   item.image && item.image.startsWith("http")
@@ -176,7 +181,6 @@ function Home() {
               />
 
               <h3 className="font-bold mt-2">{item.name}</h3>
-
               <p className="text-sm">{item.category}</p>
               <p className="text-sm">{item.location}</p>
 
@@ -210,18 +214,14 @@ function Home() {
         <h2 className="text-xl font-bold mb-2">
           Why Adopt from PawMart?
         </h2>
-        <p>
-          Adopting saves lives and gives pets a second chance.
-        </p>
+        <p>Adopting saves lives and gives pets a second chance.</p>
       </div>
 
       <div className="bg-[#FFC49F] p-6 rounded text-center">
         <h2 className="text-xl font-bold mb-2">
           Meet Our Pet Heroes
         </h2>
-        <p>
-          Amazing adopters making a difference every day.
-        </p>
+        <p>Amazing adopters making a difference every day.</p>
       </div>
     </div>
   );
